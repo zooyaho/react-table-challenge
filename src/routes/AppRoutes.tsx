@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import UserPage from "@/pages/UserPage";
+import UserPage from "@/pages/PersonPage";
 
 export default function AppRoutes() {
   return (
