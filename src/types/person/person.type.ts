@@ -5,7 +5,7 @@ export interface GetPersonsParamsType {
   _birthday_start?: string;
 }
 
-export interface AddressType {
+export interface AddressInfoType {
   id: number;
   street: string;
   streetName: string;
@@ -20,13 +20,15 @@ export interface AddressType {
 
 export interface PersonType {
   id: number;
+  fullname: string;
   firstname: string;
   lastname: string;
   email: string;
   phone: string;
   birthday: string;
   gender: string;
-  address: AddressType;
+  address: AddressInfoType;
+  addressName: string;
   website: string;
   image: string;
 }

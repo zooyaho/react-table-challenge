@@ -19,7 +19,21 @@ export const useGetPersons = (params?: GetPersonsParamsType) => {
     queryFn: () => getPersons(params || { _quantity: 5, _gender: "female" }),
     refetchOnMount: "always", // 무효화 시 refetch 실행
     select: (result: GetResPersonsType) => {
-      return result.data;
+      return result.data.map((person) => {
+        // _locale에 따라 fullname 구성
+        const fullname =
+          params?._locale === "ko_KR"
+            ? `${person.lastname} ${person.firstname}`
+            : `${person.firstname} ${person.lastname}`;
+
+        const addressName = `${person.address.city} ${person.address.streetName}`;
+
+        return {
+          ...person,
+          fullname, // fullname 속성 추가
+          addressName, // 주소명 속성 추가
+        };
+      });
     },
   });
 
