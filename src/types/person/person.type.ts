@@ -1,4 +1,4 @@
-export interface GetUsersParamsType {
+export interface GetPersonsParamsType {
   _quantity?: number;
   _gender?: string;
   _birthday_start?: string;
@@ -17,7 +17,7 @@ export interface AddressType {
   longitude: number;
 }
 
-export interface UserType {
+export interface PersonType {
   id: number;
   firstname: string;
   lastname: string;
@@ -30,11 +30,11 @@ export interface UserType {
   image: string;
 }
 
-export interface GetResUsersType {
+export interface GetResPersonsType {
   status: string;
   code: number;
   locale: string;
   seed: string | null;
   total: number;
-  data: UserType[];
+  data: PersonType[];
 }
