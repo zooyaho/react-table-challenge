@@ -1,5 +1,6 @@
 export interface GetPersonsParamsType {
   _quantity?: number;
+  _locale?: string;
   _gender?: string;
   _birthday_start?: string;
 }

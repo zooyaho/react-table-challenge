@@ -6,7 +6,7 @@ import {
   PersonType,
 } from "@/types/person/person.type";
 
-/** 사용자 목록 */
+/** 사람 목록 */
 export const useGetPersons = (params?: GetPersonsParamsType) => {
   const {
     data: personsData,
