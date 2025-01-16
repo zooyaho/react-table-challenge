@@ -15,6 +15,7 @@ export default function PersonTable() {
   const {
     data,
     fetchNextPage,
+    refetch,
     hasNextPage,
     isFetchingNextPage,
     isError,
@@ -62,8 +63,10 @@ export default function PersonTable() {
     if (data) {
       const mergedData = data.pages.flatMap((page) => page.data);
       setPersonTableData(mergedData);
+    } else {
+      refetch();
     }
-  }, [data, setPersonTableData]);
+  }, [data, setPersonTableData, refetch]);
 
   return (
     <>

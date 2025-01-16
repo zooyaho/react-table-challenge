@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import Checkbox from "@/components/common/Checkbox";
 import { CheckBoxTableColumnType } from "./CheckboxTable.type";
+import Tooltip from "@/components/common/Tooltip";
 
 interface CheckboxTablePropsType<T> {
   data: T[]; // 테이블 데이터
@@ -15,6 +16,11 @@ export default function CheckboxTable<T>({
 }: CheckboxTablePropsType<T>) {
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [tooltip, setTooltip] = useState<{
+    content: string;
+    x: number;
+    y: number;
+  } | null>(null); // 데이터 셀에 대한 툴팁 정보
 
   // 행 확장 토글
   const toggleRow = (index: number) => {
@@ -56,8 +62,8 @@ export default function CheckboxTable<T>({
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse border border-gray-200">
+    <div className="w-full overflow-x-auto">
+      <table className="table-fixed w-full border-collapse border border-gray-200">
         {/* 컬럼 헤더 */}
         <thead className="bg-gray-100">
           <tr>
@@ -117,9 +123,24 @@ export default function CheckboxTable<T>({
                 {columns.map((column) => (
                   <td
                     key={String(column.key)}
-                    className={`px-4 py-2 text-${column.alignment || "left"} ${
+                    className={`px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis cursor-default text-${
+                      column.alignment || "left"
+                    } ${
                       selectedRows.has(index) ? "text-blue-700" : "text-black"
                     }`}
+                    onMouseEnter={(e) => {
+                      const element = e.currentTarget;
+                      if (element.scrollWidth > element.clientWidth) {
+                        const rect = element.getBoundingClientRect();
+
+                        setTooltip({
+                          content: String(row[column.key]),
+                          x: rect.left + window.scrollX,
+                          y: rect.bottom + window.scrollY,
+                        });
+                      }
+                    }}
+                    onMouseLeave={() => setTooltip(null)}
                   >
                     {column.render
                       ? column.render(row[column.key], row)
@@ -138,6 +159,9 @@ export default function CheckboxTable<T>({
           ))}
         </tbody>
       </table>
+      {tooltip && (
+        <Tooltip content={tooltip.content} x={tooltip.x} y={tooltip.y} />
+      )}
     </div>
   );
 }
