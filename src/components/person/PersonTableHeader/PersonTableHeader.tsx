@@ -46,7 +46,7 @@ export default function PersonTableHeader() {
       <SearchInput
         ref={inputRef}
         className="w-[30%]"
-        placeholder="검색"
+        placeholder="이름/이메일/생일 검색"
         onKeyDown={handleSearch}
       />
     </div>
