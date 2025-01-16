@@ -1,16 +1,19 @@
 import { AiOutlineSearch } from "react-icons/ai";
-import { InputHTMLAttributes } from "react";
+import { forwardRef, InputHTMLAttributes } from "react";
 import BasicInput from "../BasicInput";
 
-export default function SearchInput({
-  className = "",
-  ...props
-}: InputHTMLAttributes<HTMLInputElement>) {
+const SearchInput = forwardRef<
+  HTMLInputElement,
+  InputHTMLAttributes<HTMLInputElement>
+>(({ className = "", ...props }, ref) => {
   return (
     <BasicInput
+      ref={ref}
       leftIcon={<AiOutlineSearch />}
       className={`w-full ${className}`}
       {...props}
     />
   );
-}
+});
+
+export default SearchInput;
