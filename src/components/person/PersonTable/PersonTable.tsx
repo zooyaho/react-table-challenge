@@ -15,7 +15,7 @@ export default function PersonTable() {
   const { sortableColumns } = useSortableCheckBoxTableColumns(personColumns);
 
   return (
-    <>
+    <div className="w-full min-h-[50%] flex items-center justify-center flex-col">
       {isLoading ? (
         <p>Loading...</p>
       ) : isError ? (
@@ -38,6 +38,6 @@ export default function PersonTable() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
