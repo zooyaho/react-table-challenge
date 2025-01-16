@@ -1,5 +1,5 @@
 import { CheckBoxTableColumnType } from "@/components/common/table/CheckboxTable/CheckboxTable.type";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export function useSortableCheckBoxTableColumns<T>(
@@ -63,6 +63,18 @@ export function useSortableCheckBoxTableColumns<T>(
       };
     });
   }, [handleSort, columns, sortConfig]);
+
+  useEffect(() => {
+    const sortKey = searchParams.get("sortKey") as keyof T | null;
+    const sortOrder = searchParams.get("sortOrder") as "asc" | "desc" | null;
+
+    if (sortKey && sortOrder) {
+      setSortConfig({
+        key: sortKey,
+        direction: sortOrder,
+      });
+    }
+  }, [searchParams]);
 
   return { sortableColumns };
 }
