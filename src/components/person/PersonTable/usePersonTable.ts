@@ -1,12 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { getPaginatedPersons } from "@/apis/person/personApi";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { PersonTableDataType } from "./PersonTable.type";
+import { useSearchParams } from "react-router-dom";
 
 export function usePersonTable() {
-  const [personTableData, setPersonTableData] = useState<PersonTableDataType[]>(
-    []
-  ); // 테이블 데이터 상태
+  const [searchParams] = useSearchParams();
+  const [originalPersonTableData, setOriginalPersonTableData] = useState<
+    PersonTableDataType[]
+  >([]); // 테이블 오리지널(서버) 데이터 상태
   const loaderRef = useRef<HTMLDivElement>(null); // 무한 스크롤 로더 참조
 
   const {
@@ -30,6 +32,38 @@ export function usePersonTable() {
     getNextPageParam: (lastPage, allPages) =>
       lastPage.hasMore ? allPages.length + 1 : undefined,
   });
+
+  /**
+   * person table data
+   * 테이블 행 데이터
+   *
+   * - 쿼리 스트링에서 sortKey, sortOrder key 확인하여 정렬 수행
+   */
+  const personTableData = useMemo(() => {
+    // 정렬 수행하기 위해 쿼리 스트링에서 sortKey, sortOrder key 확인
+    const sortKey = searchParams.get("sortKey") as
+      | keyof PersonTableDataType
+      | null;
+    const sortOrder = searchParams.get("sortOrder") as "asc" | "desc" | null;
+
+    if (!sortKey || !sortOrder) {
+      // 정렬되지 않은 original 데이터 반환
+      return originalPersonTableData;
+    }
+
+    return [...originalPersonTableData].sort((a, b) => {
+      const aValue = a[sortKey];
+      const bValue = b[sortKey];
+
+      if (aValue < bValue) {
+        return sortOrder === "asc" ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortOrder === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [originalPersonTableData, searchParams]);
 
   /**
    * setLoaderRef
@@ -71,7 +105,7 @@ export function usePersonTable() {
   useEffect(() => {
     if (data) {
       const mergedData = data.pages.flatMap((page) => page.data);
-      setPersonTableData(mergedData);
+      setOriginalPersonTableData(mergedData);
     } else {
       refetch();
     }

@@ -2,6 +2,11 @@ import React, { Fragment, useState } from "react";
 import Checkbox from "@/components/common/Checkbox";
 import { CheckBoxTableColumnType } from "./CheckboxTable.type";
 import Tooltip from "@/components/common/Tooltip";
+import {
+  TbArrowsSort,
+  TbSortAscending,
+  TbSortDescending,
+} from "react-icons/tb";
 
 interface CheckboxTablePropsType<T> {
   data: T[]; // 테이블 데이터
@@ -86,7 +91,22 @@ export default function CheckboxTable<T>({
                   column.alignment || "left"
                 }`}
               >
-                {column.headerName}
+                <div className="flex items-center">
+                  {/* 컬럼 명 */}
+                  {column.headerName}
+                  {/* 정렬 버튼 */}
+                  {column.sortable && (
+                    <button className="ml-2" onClick={column.onSort}>
+                      {column.sortOrder === "asc" ? (
+                        <TbSortAscending />
+                      ) : column.sortOrder === "desc" ? (
+                        <TbSortDescending />
+                      ) : (
+                        <TbArrowsSort />
+                      )}
+                    </button>
+                  )}
+                </div>
               </th>
             ))}
           </tr>

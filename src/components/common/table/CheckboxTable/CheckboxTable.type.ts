@@ -4,4 +4,7 @@ export interface CheckBoxTableColumnType<T> {
   width?: string;
   render?: (value: T[keyof T], row: T) => React.ReactNode; // 사용자 정의 렌더링
   alignment?: "left" | "center" | "right"; // 텍스트 정렬
+  sortable: boolean;
+  sortOrder?: "asc" | "desc" | null;
+  onSort?: () => void;
 }
