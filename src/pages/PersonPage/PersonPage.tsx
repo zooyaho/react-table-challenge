@@ -1,6 +1,6 @@
 import { SearchInput } from "@/components/common/input";
 import PersonTable from "@/components/person/PersonTable";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function PersonPage() {
@@ -29,6 +29,15 @@ export default function PersonPage() {
       }
     }
   };
+
+  // 쿼리 스트링에 keyword가 있을 경우 SearchInput value와 동기화
+  useEffect(() => {
+    const keyword = searchParams.get("keyword") || "";
+
+    if (inputRef.current) {
+      inputRef.current.value = keyword;
+    }
+  }, [searchParams]);
 
   return (
     <main className="flex justify-center  min-h-screen">

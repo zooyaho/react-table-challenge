@@ -65,6 +65,7 @@ export function useSortableCheckBoxTableColumns<T>(
   }, [handleSort, columns, sortConfig]);
 
   useEffect(() => {
+    // mounted 시 sortKey, sortOrder 쿼리 스트링 확인하여 sortConfig 상태 동기화
     const sortKey = searchParams.get("sortKey") as keyof T | null;
     const sortOrder = searchParams.get("sortOrder") as "asc" | "desc" | null;
 

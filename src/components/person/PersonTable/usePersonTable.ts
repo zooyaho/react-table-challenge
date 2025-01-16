@@ -37,7 +37,8 @@ export function usePersonTable() {
    * person table data
    * 테이블 행 데이터
    *
-   * - 쿼리 스트링에서 sortKey, sortOrder key 확인하여 정렬 수행
+   * - 쿼리 스트링에서 sortKey, sortOrder 확인하여 정렬 수행
+   * - 쿼리 스트링에서 keyword 확인하여 검색 수행
    */
   const personTableData = useMemo(() => {
     // 정렬 수행하기 위해 쿼리 스트링에서 sortKey, sortOrder key 확인
@@ -45,24 +46,36 @@ export function usePersonTable() {
       | keyof PersonTableDataType
       | null;
     const sortOrder = searchParams.get("sortOrder") as "asc" | "desc" | null;
+    const keyword = searchParams.get("keyword")?.toLowerCase();
 
-    if (!sortKey || !sortOrder) {
-      // 정렬되지 않은 original 데이터 반환
-      return originalPersonTableData;
+    let filteredData = originalPersonTableData;
+
+    // 검색 수행
+    if (keyword) {
+      filteredData = filteredData.filter(({ fullname, email, birthday }) =>
+        [fullname, email, birthday].some((field) =>
+          field.toLowerCase().includes(keyword)
+        )
+      );
     }
 
-    return [...originalPersonTableData].sort((a, b) => {
-      const aValue = a[sortKey];
-      const bValue = b[sortKey];
+    // 정렬 수행
+    if (sortKey && sortOrder) {
+      filteredData = [...filteredData].sort((a, b) => {
+        const aValue = a[sortKey];
+        const bValue = b[sortKey];
 
-      if (aValue < bValue) {
-        return sortOrder === "asc" ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortOrder === "asc" ? 1 : -1;
-      }
-      return 0;
-    });
+        if (aValue < bValue) {
+          return sortOrder === "asc" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortOrder === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    return filteredData;
   }, [originalPersonTableData, searchParams]);
 
   /**
