@@ -1,10 +1,3 @@
-export interface GetPersonsParamsType {
-  _quantity?: number;
-  _locale?: string;
-  _gender?: string;
-  _birthday_start?: string;
-}
-
 export interface AddressInfoType {
   id: number;
   street: string;
@@ -31,13 +24,4 @@ export interface PersonType {
   addressName: string;
   website: string;
   image: string;
-}
-
-export interface GetResPersonsType {
-  status: string;
-  code: number;
-  locale: string;
-  seed: string | null;
-  total: number;
-  data: PersonType[];
 }

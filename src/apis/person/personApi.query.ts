@@ -1,10 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPersons } from "@/apis/person/personApi";
-import {
-  GetResPersonsType,
-  GetPersonsParamsType,
-  PersonType,
-} from "@/types/person/person.type";
+import { PersonType } from "@/types/person/person.type";
+import { GetPersonsParamsType, GetResPersonsType } from "./personApi.type";
 
 /** 사람 목록 */
 export const useGetPersons = (params?: GetPersonsParamsType) => {
